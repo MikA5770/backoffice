@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block content %}
+
+<div class="p my-5">
+    {% if is_granted('USER_ADD') %}
+        <a href="{{ path('user-add') }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Ajouter un utilisateur</a>
+    {% endif %}
+
+        {% for type, messages in app.flashes %}
+        <div class="my-6 p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                </svg>
+                {{ messages | join('. ')}}
+            </div>
+        {% endfor %}
+    </div>
+
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Nom</th>
+                <th scope="col" class="px-6 py-3">Prénom</th>
+                <th scope="col" class="px-6 py-3">Email</th>
+                <th scope="col" class="px-6 py-3">Roles</th>
+                <th scope="col" class="px-6 py-3 text-center">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td class="px-6 py-4">
+                    {{ user.lastname }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ user.firstname }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ user.email }}
+                </td>
+                <td class="px-6 py-4">
+                    {% for role in user.roles %}
+                        <span>{{ role }}</span>{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+                    <td class="px-6 py-4 text-center">
+                        <div class="flex justify-around">   
+                            {% if is_granted('USER_EDIT') %}
+                                <a href="{{ path('user-edit', { 'id': user.id }) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Modifier</a>
+                            {% endif %} 
+                            {% if is_granted('USER_DELETE') %}
+                                <a href="{{ path('user-delete', { 'id': user.id }) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Supprimer</a>
+                            {% endif %}
+                        </div>
+                    </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+{% endblock %}

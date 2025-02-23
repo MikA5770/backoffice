@@ -11,7 +11,55 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body> 
+        <div class="flex min-h-screen">
+            <nav class="bg-[#F9FAFB] dark:bg-gray-800 w-1/5 flex flex-col border-r-2 border-r-slate-600">
+
+
+
+
+
+
+                {% if app.user %}
+                    <div class="items-start text-center">
+                        Connecté en tant que :
+                        <div class="mb-4">{{ app.user.firstname }} {{ app.user.lastname }}</div> 
+                        <a href="{{ path('app_logout') }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                            Se déconnecter
+                        </a>
+                    </div>
+                    <ul class="flex justify-center items-center flex-col text-2xl space-y-2 flex-grow">
+                        {% if is_granted('USER_VIEW') %}
+                            <li><a class="w-64 justify-center flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group" href="{{ path('user-list') }}">Utilisateurs</a></li>
+                        {% endif %}
+                            <li><a class="w-64 justify-center flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group" href="{{ path('product-list') }}">Produits</a></li>
+                        {% if is_granted('CLIENT_VIEW') %}
+                            <li><a class="w-64 justify-center flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group" href="{{ path('client-list') }}">Clients</a></li>
+                        {% endif %}
+                    </ul>
+                {% else %}
+                    <div class="text-center my-4">
+                        <a href="{{ path('app_login') }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                            Se connecter
+                        </a>
+                    </div>
+                {% endif %}
+
+
+
+
+
+
+
+
+
+                
+            </nav>
+
+            <main class="w-5/6 p-4 bg-gradient-to-r from-[#0F2027] via-[#203A43] to-[#2C5364] text-white">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+
     </body>
 </html>
