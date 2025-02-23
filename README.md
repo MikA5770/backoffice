@@ -1,65 +1,39 @@
-# Symfony 7.1 Boilerplate 
+# Backoffice PHP Symfony
+ 
+## Documentation
 
-Attention : Il vous faut PHP 8.2 pour faire fonctionner ce projet si vous avez PHP 8.1 utiliser la branche symfony64 du repository.
+### Installation 
 
-## Initialisation de votre IDE
+* Copier-coller le fichier `.env` et le renommer en `.env.local` 
+* Changer `DATABASE_URL`
+* Changer les informations de l'objet PDO dans le service `ProductService.php` pour pouvoir exporter les produits
+* `composer install`
+* `php bin/console d:d:c`
+* `php bin/console make:migration`
+* `php bin/console d:m:migrate`
+* `php bin/console d:f:l`
+* `php bin/console tailwind:build`
+* `symfony serve:start`
 
-### PHPStorm
+### Lancement des tests
 
-1. Ouvrir le projet dans PHPStorm
-2. Installer les extensions Twig et Symfony
-    - Aller dans File > Settings > Plugins
-    - Installer les extensions (Twig, EA Inspection, PHP Annotations, .env files support)
+* Afin de lancer les tests, il suffit de lancer la commande : `.\vendor\bin\phpunit tests\Service`
+* Cela permet de lancer deux tests :
+  * Le premier permet de tester la fonction de création d'un client se trouvant dans le service `ClientService`. Cette fonction est utilisée par la commande symfony `php bin/console add:client` qui permet d'ajouter des clients à la base de données. Le test utilise un Mock de l'EntityManager.
+  * Le second teste la fonction exportCSV du service `ProductService`. Elle sert à exporter l'ensemble des produits au format CSV. Le test vérifie que la fonction renvoie bien la réponse attendue.
 
-### Visual Studio Code
+### Fonctionnalités
+* Connexion et déconnexion
+* Le backoffice permet de gérer des produits, des utilisateurs et des clients selon le rôle de l'utilisateur connecté
+* Produits : ajout, modification, suppression (administrateur)
+* Utilisateurs : ajout, modification, suppression (administrateur)
+* Clients : ajout, modification (administrateur et gestionnaire)
+* Exportation des produits dans un fichier CSV
+* Importation de produits à l'aide d'un fichier CSV par ligne de commande Symfony
+* Ajout de nouveau client par ligne de commande Symfony
 
-1. Ouvrir le projet dans Visual Studio Code
-2. Installer les extensions pour PHP, Twig et Symfony
-    - Aller dans l'onglet Extensions
-    - Installer les extensions (whatwedo.twig, TheNouillet.symfony-vscode, DEVSENSE.phptools-vscode, 
-    bmewburn.vscode-intelephense-client, zobo.php-intellisense)
+### Autres informations
 
-## Installation avec IDX
-
-1. Fork le projet sur votre compte GitHub
-2. Importer le projet depuis votre GitHub sur IDX
-3. Le projet est déjà lancé il suffit d'aller dans l'onglet du terminal avec `start` puis cliquer sur le lien `localhost`
-4. Lancer la commande `composer i` pour installer les dépendances du projet.
-5. Pour accéder à la base de données `mysql -u root`
-6. Dans un fichier à la racine `.env.local` mettre cette variable d'environnement 
-`DATABASE_URL="mysql://root:@127.0.0.1:3306/app?serverVersion=10.11.2-MariaDB&charset=utf8mb4"`
-
-## Installation en local
-
-1. Cloner le projet
-2. Installer PHP >= 8.2 et Composer (Sur votre machine utiliser XAMPP pour windows, MAMP pour mac ou LAMP pour linux bien prendre la version PHP 8.2)
-3. Installer les dépendances du projet avec la commande `composer install`
-4. Faire un virtual host sur votre serveur local (XAMPP par exemple pour Windows) 
- - Ouvrir le fichier `httpd-vhosts.conf` dans le répertoire `C:\xampp\apache\conf\extra`
-    - Ajouter le code suivant à la fin du fichier
-    ```
-    <VirtualHost *>
-        DocumentRoot "C:\Users\votre_username\Documents\iut\symfony_base\public"
-        ServerName symfony_base.local
-        
-        <Directory "C:\Users\votre_username\Documents\iut\symfony_base\public">
-            AllowOverride All
-            Require all granted
-        </Directory>
-    </VirtualHost>
-    ```
-    - Ajouter l'adresse IP de votre machine dans le fichier `C:\Windows\System32\drivers\etc\hosts`
-    ```
-    127.0.0.1 symfony_base.local
-    ```
-    - Redémarrer Apache
-    - Accéder à l'adresse `symfony_base.local` dans votre navigateur
-
-4. Créer un fichier `.env.local` à la racine du projet et ajouter la configuration de la base de données
-5. Créer la base de données avec la commande `php bin/console doctrine:database:create`
-
-## Utilisation
-
-- N'hésitez pas à consulter la documentation de Symfony pour plus d'informations sur l'utilisation du framework : https://symfony.com/doc/current/index.html
-
-- Notez comment fonctionne votre projet dans le fichier README.md et mettez à jour ce fichier au fur et à mesure de l'avancement de votre projet pour aider les autres développeurs à comprendre comment fonctionne votre projet.
+* Les prix des produits sont filtrés de base dans le tableau
+* Voici une courte [vidéo](https://www.youtube.com/watch?v=MkWOs4EM_HI) de l'application.
+* La vidéo de présentation ne montre pas toutes les vérifications des actions possibles selon le rôle de l'utilisateur (par ex : accès à la liste des clients par l'URL, ajout d'un utilisateur en tant que Manager...). Cependant la sécurité et les vérifications sont bels et bien implémentées dans l'application à l'aide des Voters.
