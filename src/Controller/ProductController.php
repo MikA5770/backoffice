@@ -18,12 +18,22 @@ class ProductController extends AbstractController
     #[Route('/export-csv', name: 'export_csv')]
     public function exportCSV(ProductService $productService): Response
     {
+        if(!$this->isGranted('ROLE_USER')){
+            $this->addFlash('success', "Vous n'êtes pas connecté !");
+            return $this->redirectToRoute('home'); 
+        };
+        
         return $productService->exportCSV();
     }
     
     #[Route('/product-list', name: 'product-list')]
     public function index(ProductRepository $productRepository): Response
     {        
+        if(!$this->isGranted('ROLE_USER')){
+            $this->addFlash('success', "Vous n'êtes pas connecté !");
+            return $this->redirectToRoute('home'); 
+        };
+        
         $products = $productRepository->sortByPrice();
 
         return $this->render('product/product.html.twig', [
